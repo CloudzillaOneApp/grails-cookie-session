@@ -68,6 +68,11 @@ public class SessionRepositoryResponseWrapper extends HttpServletResponseWrapper
         return;
       }
 
+      if( request.getAttribute("noSessionSerialization") != null ){
+        if( log.isTraceEnabled() ){ log.trace("session serialization is disabled, not attempting to save."); }
+        return;
+      }
+
       SerializableSession session = (SerializableSession) request.getSession(this.enforceSession);
 
       if( session == null ){
