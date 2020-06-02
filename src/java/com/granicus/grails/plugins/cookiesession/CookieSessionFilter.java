@@ -71,7 +71,11 @@ public class CookieSessionFilter extends OncePerRequestFilter implements Initial
       SessionRepositoryRequestWrapper requestWrapper = new SessionRepositoryRequestWrapper( request, sessionRepository );
       requestWrapper.setServletContext( this.getServletContext() );
       requestWrapper.setSessionPersistenceListeners(this.sessionPersistenceListeners);
-      requestWrapper.restoreSession();
+      try {
+          requestWrapper.restoreSession();
+      } catch (Exception ex) {
+          log.error("Failed to parse and restore cookie", ex);
+      }
 
       // if spring security integration is supported it is necessary to enforce session creation 
       // if one does not exist yet. otherwise the security context will not be persisted and 
